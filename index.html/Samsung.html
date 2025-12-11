@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AbiiPhoneStore - Jual Beli Handphone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  url('https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      min-height: 60vh;
+      color: white;
+      padding: 2rem;
+    }
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .card-title:hover {
+      cursor: pointer;
+      color: #0d6efd; /* Warna biru Bootstrap */
+    }
+    /* Mengubah style agar gambar lebih rapi di dalam card */
+    .img-container {
+        height: 200px; /* Tinggi wadah gambar */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+    .card-img-top {
+      max-width: 100%; 
+      max-height: 100%; 
+      width: auto;
+      object-fit: contain;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .card-text {
+        font-weight: bold;
+        color: #dc3545; /* Warna harga merah */
+    }
+    /* Styling untuk tabel detail di modal */
+    .table-detail th {
+        width: 35%;
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+    <ul>
+      <h1 class="fs-4"><a href="pertama.html" class="text-white me-3 text-decoration-none">AbiiPhoneStore</a></h1>
+    </ul>
+    <nav class="d-flex align-items-center">
+      <a href="index.html" class="text-white me-3 text-decoration-none">Home</a>
+      <div class="dropdown me-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="produkDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Handphone
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="produkDropdown">
+          <li><a class="dropdown-item" href="Samsung.html">Samsung</a></li>
+          <li><a class="dropdown-item" href="Iphone.html">Iphone</a></li>
+          <li><a class="dropdown-item" href="Oppo.html">Oppo</a></li>
+          <li><a class="dropdown-item" href="Realme.html">Realme</a></li>
+          <li><a class="dropdown-item" href="Poco.html">Poco</a></li>
+          <li><a class="dropdown-item" href="Xiomi.html">Xiaomi</a></li>
+          <li><a class="dropdown-item" href="Vivo.html">Vivo</a></li>
+          <li><a class="dropdown-item" href="ROG.html">ROG</a></li>
+        </ul>
+      </div>
+      <a href="keranjang.html" class="text-white me-3 text-decoration-none">Keranjang</a>
+      <a href="login.html" class="text-white text-decoration-none">Login</a>
+    </nav>
+  </header>
+
+  <div class="container my-5">
+    <div class="row mb-4" data-aos="fade-up">
+      <div class="col text-center">
+        <h2>Produk Samsung Terbaru</h2>
+        <p>Pilih handphone Samsung terbaik untukmu</p>
+        <input type="text" class="form-control w-50 mx-auto" id="searchInput" placeholder="Cari handphone Samsung...">
+        
+        <select class="form-select w-50 mx-auto mt-3" id="kategoriDropdown">
+          <option value="">Semua Kategori</option>
+          <option value="harga-asc">Urutkan berdasarkan Harga (Rendah ke Tinggi)</option>
+          <option value="harga-desc">Urutkan berdasarkan Harga (Tinggi ke Rendah)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="produk"></div>
+    
+  </div>
+
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="detailModalLabel">Detail Produk Samsung</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-5 text-center mb-3">
+                <img id="modalImage" src="" class="img-fluid rounded" style="max-height: 300px;" alt="Detail Gambar">
+            </div>
+            <div class="col-md-7">
+                <h3 id="modalNama" class="fw-bold text-dark"></h3>
+                <h4 id="modalHarga" class="text-danger mb-3"></h4>
+                <p id="modalDeskripsi" class="text-muted"></p>
+                
+                <table class="table table-bordered table-sm table-detail mt-3">
+                    <tbody>
+                        <tr><th>Layar</th><td id="specLayar"></td></tr>
+                        <tr><th>Chipset</th><td id="specChipset"></td></tr>
+                        <tr><th>RAM/Storage</th><td id="specRam"></td></tr>
+                        <tr><th>Kamera</th><td id="specKamera"></td></tr>
+                        <tr><th>Baterai</th><td id="specBaterai"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-success" id="modalBtnBeli">Beli Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="modal fade" id="konfirmasiModal" tabindex="-1" aria-labelledby="konfirmasiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="konfirmasiModalLabel">✅ Berhasil Ditambahkan!</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="konfirmasiMessage">Produk telah berhasil masuk ke keranjang.</p>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-primary" id="btnLanjutBelanja" data-bs-dismiss="modal">Lanjut Belanja</button>
+                    <button type="button" class="btn btn-success" id="btnLihatKeranjangModal">Lihat Keranjang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <footer>
+    <p>&copy; 2025 AbiiPhoneStore. Hubungi kami di WhatsApp: 0812-3456-7890</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    // DATA PRODUK SAMSUNG DENGAN DETAIL SPESIFIKASI BARU
+    const produk = [
+      { 
+        id: 1,
+        nama: 'Samsung Galaxy S25 Ultra 5G', 
+        harga: 26599000, 
+        gambar: 'https://static.s-sfr.fr/media/catalogue/article/mobile/raeirnvn/1_samsung_galaxy_s25_ultra_dosface_argent_titane_184x184.webp',
+        deskripsi: 'Flagship terbaru Samsung dengan S-Pen terintegrasi, AI canggih, dan kamera 200MP yang disempurnakan.',
+        specs: {
+            layar: '6.8" Dynamic AMOLED 2X, 120Hz, 3000 nits',
+            chipset: 'Snapdragon 8 Elite for Galaxy (Gen 4)',
+            ram: '12GB / 256GB - 1TB',
+            kamera: '200MP Main + 50MP Periscope + 12MP UW',
+            baterai: '5000 mAh, 45W Super Fast Charging'
+        }
+      },
+      { 
+        id: 2,
+        nama: 'Samsung Galaxy S24 Ultra', 
+        harga: 24599000, 
+        gambar: 'https://imagedelivery.net/JAV112JY973Crznn4xb8Sg/a0643a7c-8bfd-4e1c-5f9f-9e060db33900/public',
+        deskripsi: 'Generasi AI Phone pertama Samsung, dengan fitur Galaxy AI Revolusioner dan bodi Titanium.',
+        specs: {
+            layar: '6.8" Dynamic AMOLED 2X, 120Hz',
+            chipset: 'Snapdragon 8 Gen 3 for Galaxy',
+            ram: '12GB / 256GB - 1TB',
+            kamera: '200MP Main + 10MP 10x Optical Zoom',
+            baterai: '5000 mAh, 45W Super Fast Charging'
+        }
+      },
+      { 
+        id: 3,
+        nama: 'Samsung Galaxy S23 Ultra', 
+        harga: 22599000, 
+        gambar: 'https://www.mobilkigsm.pl/cdn/shop/files/Smartfon-SAMSUNG-Galaxy-S23-Ultra-Jasnorozowy-front-tyl-1_wynik.webp?v=1708602258&width=600',
+        deskripsi: 'Kamera Malam (Nightography) yang luar biasa dan chipset Snapdragon yang efisien.',
+        specs: {
+            layar: '6.8" Dynamic AMOLED 2X, 120Hz',
+            chipset: 'Snapdragon 8 Gen 2 for Galaxy',
+            ram: '8GB / 256GB - 1TB',
+            kamera: '200MP Main, Zoom 100x Space Zoom',
+            baterai: '5000 mAh, 45W Super Fast Charging'
+        }
+      },
+      { 
+        id: 4,
+        nama: 'Samsung Galaxy Z Fold5', 
+        harga: 18999000, 
+        gambar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn62wohmVjEyDf8D2brbjO8Y_SXQFWBIMB_ADtBgJjJ-xWP-Y81Mybkbiwogd6oNKDj1w&usqp=CAU',
+        deskripsi: 'Multitasking layaknya PC dalam genggaman, dengan engsel yang lebih tipis dan ringan.',
+        specs: {
+            layar: 'Main 7.6" Foldable Dynamic AMOLED, Cover 6.2" Dynamic AMOLED',
+            chipset: 'Snapdragon 8 Gen 2 for Galaxy',
+            ram: '12GB / 256GB - 1TB',
+            kamera: '50MP Main, Under Display Camera',
+            baterai: '4400 mAh, 25W Fast Charging'
+        }
+      },
+      { 
+        id: 5,
+        nama: 'Samsung Galaxy S24+', 
+        harga: 15999000, 
+        gambar: 'https://carisinyal.com/wp-content/uploads/2024/01/Samsung-Galaxy-S24-Plus_.webp',
+        deskripsi: 'Performa flagship dengan layar yang besar dan fitur Galaxy AI yang lengkap.',
+        specs: {
+            layar: '6.7" Dynamic AMOLED 2X, 120Hz',
+            chipset: 'Exynos 2400 / Snapdragon 8 Gen 3',
+            ram: '12GB / 256GB - 512GB',
+            kamera: '50MP Main + 10MP Telephoto 3x',
+            baterai: '4900 mAh, 45W Super Fast Charging'
+        }
+      },
+      { 
+        id: 6,
+        nama: 'Samsung Galaxy Z Flip5', 
+        harga: 12555000, 
+        gambar: 'https://cworld.id/wp-content/uploads/2023/07/samsung_galaxy_z_flip5_5g_mint_1_1.jpg',
+        deskripsi: 'Ponsel lipat gaya dengan Flex Window (layar depan) yang lebih besar dan kustomisasi maksimal.',
+        specs: {
+            layar: 'Main 6.7" Foldable Dynamic AMOLED, Cover 3.4" Super AMOLED',
+            chipset: 'Snapdragon 8 Gen 2 for Galaxy',
+            ram: '8GB / 256GB - 512GB',
+            kamera: '12MP Dual Camera',
+            baterai: '3700 mAh, 25W Fast Charging'
+        }
+      },
+    ];
+
+    // Fungsi formatRupiah tetap dipertahankan
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function renderProduk(filter = '') {
+      const container = document.getElementById('produk');
+      container.innerHTML = '';
+      
+      const filtered = produk.filter(p => p.nama.toLowerCase().includes(filter.toLowerCase()));
+
+      if(filtered.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted"><p>Produk tidak ditemukan.</p></div>';
+          return;
+      }
+
+      filtered.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-md-3 col-sm-6 mb-4'; /* Mengubah layout agar 4 item per baris jika ada, namun tetap 3 per baris jika produk sedikit (6 produk) */
+        col.setAttribute('data-aos', 'zoom-in');
+        col.innerHTML = `
+          <div class="card h-100">
+            <div class="img-container">
+                <img src="${item.gambar}" class="card-img-top" alt="${item.nama}">
+            </div>
+            <div class="card-body">
+              <h6 class="card-title text-truncate" title="${item.nama}" onclick="lihatDetail('${item.nama}')">${item.nama}</h6>
+              <p class="card-text">${formatRupiah(item.harga)}</p>
+              <div class="mt-auto pt-2">
+                <button class="btn btn-primary btn-sm w-100 mb-2" onclick="lihatDetail('${item.nama}')">Lihat Detail</button>
+                <button class="btn btn-success btn-sm w-100" onclick="tambahKeKeranjang('${item.nama}')">Beli Sekarang</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+
+// FUNGSI LAMA DIGANTI DENGAN INI UNTUK MENGGUNAKAN MODAL KONFIRMASI
+    function tambahKeKeranjang(namaProduk) {
+        const item = produk.find(p => p.nama === namaProduk);
+        let keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
+        keranjang.push(item);
+        localStorage.setItem('keranjang', JSON.stringify(keranjang));
+
+        // Tampilkan Modal Konfirmasi
+        const modalKonfirmasiEl = document.getElementById('konfirmasiModal');
+        const konfirmasiMessageEl = document.getElementById('konfirmasiMessage');
+        const btnLihatKeranjangModal = document.getElementById('btnLihatKeranjangModal');
+
+        // Update pesan di modal konfirmasi
+        konfirmasiMessageEl.innerHTML = `**${namaProduk}** berhasil ditambahkan ke keranjang.`;
+        
+        // Atur event listener untuk tombol "Lihat Keranjang" di modal
+        btnLihatKeranjangModal.onclick = function() {
+            window.location.href = 'keranjang.html';
+        };
+        
+        // Tampilkan Modal
+        const konfirmasiModal = new bootstrap.Modal(modalKonfirmasiEl);
+        konfirmasiModal.show();
+    }
+
+    // FUNGSI BARU UNTUK MENAMPILKAN MODAL DETAIL
+    function lihatDetail(namaProduk) {
+      const p = produk.find(p => p.nama === namaProduk);
+      if (p) {
+        // Isi data ke dalam elemen modal
+        document.getElementById('modalNama').innerText = p.nama;
+        document.getElementById('modalHarga').innerText = formatRupiah(p.harga);
+        document.getElementById('modalDeskripsi').innerText = p.deskripsi;
+        document.getElementById('modalImage').src = p.gambar;
+        
+        // Isi Spesifikasi
+        document.getElementById('specLayar').innerText = p.specs.layar;
+        document.getElementById('specChipset').innerText = p.specs.chipset;
+        document.getElementById('specRam').innerText = p.specs.ram;
+        document.getElementById('specKamera').innerText = p.specs.kamera;
+        document.getElementById('specBaterai').innerText = p.specs.baterai;
+
+        // Set tombol beli di dalam modal
+        const btnBeli = document.getElementById('modalBtnBeli');
+        btnBeli.onclick = function() {
+            tambahKeKeranjang(p.nama);
+            // Tutup modal setelah menekan Beli
+            const modalEl = document.getElementById('detailModal');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+        };
+
+        // Tampilkan Modal
+        const myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        myModal.show();
+      }
+    }
+
+    // Event listener untuk dropdown urutkan
+    document.getElementById('kategoriDropdown').addEventListener('change', e => {
+      const value = e.target.value;
+      if (value === 'harga-asc') {
+        produk.sort((a, b) => a.harga - b.harga);
+      } else if (value === 'harga-desc') {
+        produk.sort((a, b) => b.harga - a.harga);
+      }
+      renderProduk();
+    });
+
+    // Event listener untuk search
+    document.getElementById('searchInput').addEventListener('input', e => {
+      renderProduk(e.target.value);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProduk();
+    });
+  </script>
+</body>
+</html>

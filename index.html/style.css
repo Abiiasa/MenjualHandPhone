@@ -1,0 +1,10 @@
+.login_body{
+    text-align: center;
+    justify-content: center;
+
+}
+body {
+  /* ... properti font, dll. */
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+             url('https://e0.pxfuel.com/wallpapers/1010/1019/desktop-wallpaper-black-space-purple-and-green-space.jpg') center center fixed;
+}

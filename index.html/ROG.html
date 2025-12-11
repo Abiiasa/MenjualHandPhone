@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AbiiPhoneStore - Jual Beli Handphone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  url('https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      min-height: 60vh;
+      color: white;
+      padding: 2rem;
+    }
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .card-title:hover {
+      cursor: pointer;
+      color: #0d6efd; /* Warna biru Bootstrap */
+    }
+    /* Mengubah style agar gambar lebih rapi di dalam card */
+    .img-container {
+        height: 200px; /* Tinggi wadah gambar */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+    .card-img-top {
+      max-width: 100%; 
+      max-height: 100%; 
+      width: auto;
+      object-fit: contain;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .card-text {
+        font-weight: bold;
+        color: #dc3545; /* Warna harga merah */
+    }
+    /* Styling untuk tabel detail di modal */
+    .table-detail th {
+        width: 35%;
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+    <ul>
+      <h1 class="fs-4"><a href="pertama.html" class="text-white me-3 text-decoration-none">AbiiPhoneStore</a></h1>
+    </ul>
+    <nav class="d-flex align-items-center">
+      <a href="index.html" class="text-white me-3 text-decoration-none">Home</a>
+      <div class="dropdown me-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="produkDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Handphone
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="produkDropdown">
+          <li><a class="dropdown-item" href="Samsung.html">Samsung</a></li>
+          <li><a class="dropdown-item" href="Iphone.html">Iphone</a></li>
+          <li><a class="dropdown-item" href="Oppo.html">Oppo</a></li>
+          <li><a class="dropdown-item" href="Realme.html">Realme</a></li>
+          <li><a class="dropdown-item" href="Poco.html">Poco</a></li>
+          <li><a class="dropdown-item" href="Xiomi.html">Xiaomi</a></li>
+          <li><a class="dropdown-item" href="Vivo.html">Vivo</a></li>
+          <li><a class="dropdown-item" href="ROG.html">ROG</a></li>
+        </ul>
+      </div>
+      <a href="keranjang.html" class="text-white me-3 text-decoration-none">Keranjang</a>
+      <a href="login.html" class="text-white text-decoration-none">Login</a>
+    </nav>
+  </header>
+
+  <div class="container my-5">
+    <div class="row mb-4" data-aos="fade-up">
+      <div class="col text-center">
+        <h2>Produk ROG Phone Terbaru</h2>
+        <p>Pilih handphone gaming terbaik untukmu</p>
+        <input type="text" class="form-control w-50 mx-auto" id="searchInput" placeholder="Cari ROG Phone...">
+        
+        <select class="form-select w-50 mx-auto mt-3" id="kategoriDropdown">
+          <option value="">Semua Kategori</option>
+          <option value="harga-asc">Urutkan berdasarkan Harga (Rendah ke Tinggi)</option>
+          <option value="harga-desc">Urutkan berdasarkan Harga (Tinggi ke Rendah)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="produk"></div>
+    
+  </div>
+
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="detailModalLabel">Detail Produk ROG Phone</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-5 text-center mb-3">
+                <img id="modalImage" src="" class="img-fluid rounded" style="max-height: 300px;" alt="Detail Gambar">
+            </div>
+            <div class="col-md-7">
+                <h3 id="modalNama" class="fw-bold text-dark"></h3>
+                <h4 id="modalHarga" class="text-danger mb-3"></h4>
+                <p id="modalDeskripsi" class="text-muted"></p>
+                
+                <table class="table table-bordered table-sm table-detail mt-3">
+                    <tbody>
+                        <tr><th>Layar</th><td id="specLayar"></td></tr>
+                        <tr><th>Chipset</th><td id="specChipset"></td></tr>
+                        <tr><th>RAM/Storage</th><td id="specRam"></td></tr>
+                        <tr><th>Pendingin</th><td id="specPendingin"></td></tr>
+                        <tr><th>Baterai</th><td id="specBaterai"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-success" id="modalBtnBeli">Beli Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="modal fade" id="konfirmasiModal" tabindex="-1" aria-labelledby="konfirmasiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="konfirmasiModalLabel">✅ Berhasil Ditambahkan!</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="konfirmasiMessage">Produk telah berhasil masuk ke keranjang.</p>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-primary" id="btnLanjutBelanja" data-bs-dismiss="modal">Lanjut Belanja</button>
+                    <button type="button" class="btn btn-success" id="btnLihatKeranjangModal">Lihat Keranjang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <footer>
+    <p>&copy; 2025 AbiiPhoneStore. Hubungi kami di WhatsApp: 0812-3456-7890</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    // DATA PRODUK ROG PHONE DENGAN DETAIL SPESIFIKASI BARU
+    const produk = [
+      { 
+        id: 1,
+        nama: 'Asus ROG Phone 9 Pro Ultimate', 
+        harga: 24999000, 
+        gambar: 'https://dlcdnwebimgs.asus.com/gain/351D03FD-B09A-4877-BED5-A0C877023469/w260/fwebp',
+        deskripsi: 'Mesin gaming paling ekstrem. Dilengkapi pendingin aktif dan RAM terbesar di dunia smartphone.',
+        specs: {
+            layar: '6.78" AMOLED, 165Hz',
+            chipset: 'Snapdragon 8 Gen 4 for Galaxy (Overclocked)',
+            ram: '24GB / 1TB (UFS 4.1)',
+            pendingin: 'GameCool 9',
+            baterai: '6000 mAh, 65W HyperCharge'
+        }
+      },
+      { 
+        id: 2,
+        nama: 'Asus ROG Phone 8 Pro', 
+        harga: 20599000, 
+        gambar: 'https://cworld.id/wp-content/uploads/2024/03/asus_rog_phone_8_phantom_black_1.jpg',
+        deskripsi: 'Revolusi desain, kini lebih elegan tanpa meninggalkan performa monster. Cocok untuk semua skenario.',
+        specs: {
+            layar: '6.78" LTPO AMOLED, 165Hz',
+            chipset: 'Snapdragon 8 Gen 3',
+            ram: '16GB / 512GB',
+            pendingin: 'Rapid-Cooling Conductor',
+            baterai: '5500 mAh, 65W HyperCharge + 15W Wireless'
+        }
+      },
+      { 
+        id: 3,
+        nama: 'Asus ROG Phone 7 Pro', 
+        harga: 19999000, 
+        gambar: 'https://sc04.alicdn.com/kf/Aa35798b56a4a48f589895cbaaf2928695.jpg',
+        deskripsi: 'Kekuatan gaming murni dengan AeroActive Cooler 7 dan performa kelas atas yang stabil.',
+        specs: {
+            layar: '6.78" AMOLED, 165Hz',
+            chipset: 'Snapdragon 8 Gen 2',
+            ram: '16GB / 512GB',
+            pendingin: 'GameCool 7',
+            baterai: '6000 mAh, 65W HyperCharge'
+        }
+      },
+      { 
+        id: 4,
+        nama: 'Asus ROG Phone 9FE ', 
+        harga: 12599000, 
+        gambar: 'https://dlcdnwebimgs.asus.com/gain/973395F8-FFF9-4F1D-BF8F-1BBADD4CF04D',
+        deskripsi: 'Versi lebih terjangkau namun tetap mengedepankan performa gaming yang solid dan AirTrigger presisi.',
+        specs: {
+            layar: '6.78" AMOLED, 144Hz',
+            chipset: 'Snapdragon 8 Gen 2 for ROG',
+            ram: '12GB / 256GB',
+            pendingin: 'Vapor Chamber System',
+            baterai: '6000 mAh, 45W Fast Charging'
+        }
+      },
+    ];
+
+    // Fungsi formatRupiah tetap dipertahankan
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    // Mengubah renderProduk untuk menggunakan col-md-3 agar 4 item per baris
+    function renderProduk(filter = '') {
+      const container = document.getElementById('produk');
+      container.innerHTML = '';
+      
+      const filtered = produk.filter(p => p.nama.toLowerCase().includes(filter.toLowerCase()));
+
+      if(filtered.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted"><p>Produk tidak ditemukan.</p></div>';
+          return;
+      }
+
+      filtered.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-md-3 col-sm-6 mb-4'; // Ubah dari col-md-4 ke col-md-3
+        col.setAttribute('data-aos', 'zoom-in');
+        col.innerHTML = `
+          <div class="card h-100">
+            <div class="img-container">
+                <img src="${item.gambar}" class="card-img-top" alt="${item.nama}">
+            </div>
+            <div class="card-body">
+              <h6 class="card-title text-truncate" title="${item.nama}" onclick="lihatDetail('${item.nama}')">${item.nama}</h6>
+              <p class="card-text">${formatRupiah(item.harga)}</p>
+              <div class="mt-auto pt-2">
+                <button class="btn btn-primary btn-sm w-100 mb-2" onclick="lihatDetail('${item.nama}')">Lihat Detail</button>
+                <button class="btn btn-success btn-sm w-100" onclick="tambahKeKeranjang('${item.nama}')">Beli Sekarang</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+// FUNGSI LAMA DIGANTI DENGAN INI UNTUK MENGGUNAKAN MODAL KONFIRMASI
+    function tambahKeKeranjang(namaProduk) {
+        const item = produk.find(p => p.nama === namaProduk);
+        let keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
+        keranjang.push(item);
+        localStorage.setItem('keranjang', JSON.stringify(keranjang));
+
+        // Tampilkan Modal Konfirmasi
+        const modalKonfirmasiEl = document.getElementById('konfirmasiModal');
+        const konfirmasiMessageEl = document.getElementById('konfirmasiMessage');
+        const btnLihatKeranjangModal = document.getElementById('btnLihatKeranjangModal');
+
+        // Update pesan di modal konfirmasi
+        konfirmasiMessageEl.innerHTML = `**${namaProduk}** berhasil ditambahkan ke keranjang.`;
+        
+        // Atur event listener untuk tombol "Lihat Keranjang" di modal
+        btnLihatKeranjangModal.onclick = function() {
+            window.location.href = 'keranjang.html';
+        };
+        
+        // Tampilkan Modal
+        const konfirmasiModal = new bootstrap.Modal(modalKonfirmasiEl);
+        konfirmasiModal.show();
+    }
+
+    // FUNGSI BARU UNTUK MENAMPILKAN MODAL DETAIL
+    function lihatDetail(namaProduk) {
+      const p = produk.find(p => p.nama === namaProduk);
+      if (p) {
+        // Isi data ke dalam elemen modal
+        document.getElementById('modalNama').innerText = p.nama;
+        document.getElementById('modalHarga').innerText = formatRupiah(p.harga);
+        document.getElementById('modalDeskripsi').innerText = p.deskripsi;
+        document.getElementById('modalImage').src = p.gambar;
+        
+        // Isi Spesifikasi
+        document.getElementById('specLayar').innerText = p.specs.layar;
+        document.getElementById('specChipset').innerText = p.specs.chipset;
+        document.getElementById('specRam').innerText = p.specs.ram;
+        // Mengganti specKamera menjadi specPendingin
+        document.getElementById('specPendingin').innerText = p.specs.pendingin; 
+        document.getElementById('specBaterai').innerText = p.specs.baterai;
+
+        // Set tombol beli di dalam modal
+        const btnBeli = document.getElementById('modalBtnBeli');
+        btnBeli.onclick = function() {
+            tambahKeKeranjang(p.nama);
+            // Tutup modal setelah menekan Beli
+            const modalEl = document.getElementById('detailModal');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+        };
+
+        // Tampilkan Modal
+        const myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        myModal.show();
+      }
+    }
+
+    // Event listener untuk dropdown urutkan
+    document.getElementById('kategoriDropdown').addEventListener('change', e => {
+      const value = e.target.value;
+      if (value === 'harga-asc') {
+        produk.sort((a, b) => a.harga - b.harga);
+      } else if (value === 'harga-desc') {
+        produk.sort((a, b) => b.harga - a.harga);
+      }
+      renderProduk();
+    });
+
+    // Event listener untuk search
+    document.getElementById('searchInput').addEventListener('input', e => {
+      renderProduk(e.target.value);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProduk();
+    });
+  </script>
+</body>
+</html>

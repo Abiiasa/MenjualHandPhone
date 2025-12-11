@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keranjang Belanja - AbiiPhoneStore</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+    footer { background-color: #2c3e50; color: white; text-align: center; padding: 1rem; margin-top: 2rem; }
+    .cart-summary { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    /* Style untuk gambar produk di keranjang */
+    .cart-img {
+        width: 60px; /* Ukuran gambar yang lebih jelas */
+        height: 60px;
+        object-fit: contain;
+        border-radius: 5px;
+        margin-right: 15px;
+        border: 1px solid #eee;
+        padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+    <h1 class="fs-4"><a href="index.html" class="text-white text-decoration-none">AbiiPhoneStore</a></h1>
+    <nav class="d-flex align-items-center">
+      <a href="index.html" class="text-white me-3 text-decoration-none">Home</a>
+      <div class="dropdown me-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="produkDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Handphone
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="produkDropdown">
+          <li><a class="dropdown-item" href="Samsung.html">Samsung</a></li>
+          <li><a class="dropdown-item" href="Iphone.html">Iphone</a></li>
+          <li><a class="dropdown-item" href="Oppo.html">Oppo</a></li>
+          <li><a class="dropdown-item" href="Realme.html">Realme</a></li>
+          <li><a class="dropdown-item" href="Poco.html">Poco</a></li>
+          <li><a class="dropdown-item" href="Xiomi.html">Xiaomi</a></li>
+          <li><a class="dropdown-item" href="Vivo.html">Vivo</a></li>
+          <li><a class="dropdown-item" href="ROG.html">ROG</a></li>
+        </ul>
+      </div>
+      <a href="keranjang.html" class="text-white me-3 text-decoration-none">Keranjang</a>
+      <a href="login.html" class="text-white text-decoration-none">Login</a>
+    </nav>
+  </header>
+
+  <div class="container my-5">
+    <div class="row" data-aos="fade-up">
+      <div class="col-12">
+        <h2 class="mb-4">🛍️ Keranjang Belanja</h2>
+      </div>
+      
+      <div class="col-lg-8">
+        <ul id="listKeranjang" class="list-group mb-4">
+          <li class="list-group-item text-center">Memuat keranjang...</li>
+        </ul>
+        <button class="btn btn-outline-danger btn-sm mb-3" onclick="kosongkanKeranjang()">Hapus Semua Barang</button>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="cart-summary sticky-top" style="top: 20px;">
+          <h5>Ringkasan Belanja</h5>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Total Harga</span>
+            <strong id="totalHarga">Rp 0</strong>
+          </div>
+          <button onclick="lanjutKeCheckout()" class="btn btn-primary w-100 fw-bold py-2">Beli / Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="modal fade" id="kosongkanModal" tabindex="-1" aria-labelledby="kosongkanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="kosongkanModalLabel">⚠️ Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Anda yakin ingin **menghapus semua** barang dari keranjang belanja?</p>
+                <small class="text-muted d-block mb-3">Tindakan ini tidak bisa dibatalkan.</small>
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="btnHapusSemuaAksi">Ya, Hapus Semua</button>
+            </div>
+        </div>
+    </div>
+</div>
+  <footer>
+    <p>&copy; 2025 AbiiPhoneStore. WhatsApp: 0812-3456-7890</p>
+  </footer>
+  <footer>
+    <p>&copy; 2025 AbiiPhoneStore. WhatsApp: 0812-3456-7890</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+    
+    // ===================================================================
+    // DATA PRODUK LENGKAP DARI SEMUA KATEGORI (KOREKSI DAN DITAMBAH HINGGA MINIMAL 6 ITEM PER KATEGORI)
+    // ===================================================================
+    const produkLengkap = [
+  // --- SAMSUNG (6 Item) ---
+  { nama: 'Samsung Galaxy S25 Ultra 5G', harga: 26599000, gambar: 'https://static.s-sfr.fr/media/catalogue/article/mobile/raeirnvn/1_samsung_galaxy_s25_ultra_dosface_argent_titane_184x184.webp'},
+  { nama: 'Samsung Galaxy S24 Ultra', harga: 24599000, gambar: 'https://imagedelivery.net/JAV112JY973Crznn4xb8Sg/a0643a7c-8bfd-4e1c-5f9f-9e060db33900/public'},
+  { nama: 'Samsung Galaxy S23 Ultra', harga: 22599000, gambar: 'https://www.mobilkigsm.pl/cdn/shop/files/Smartfon-SAMSUNG-Galaxy-S23-Ultra-Jasnorozowy-front-tyl-1_wynik.webp?v=1708602258&width=600'},
+  { nama: 'Samsung Galaxy Z Fold5', harga: 18999000, gambar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn62wohmVjEyDf8D2brbjO8Y_SXQFWBIMB_ADtBgJjJ-xWP-Y81Mybkbiwogd6oNKDj1w&usqp=CAU'},
+  { nama: 'Samsung Galaxy S24+', harga: 15999000, gambar: 'https://carisinyal.com/wp-content/uploads/2024/01/Samsung-Galaxy-S24-Plus_.webp'},
+  { nama: 'Samsung Galaxy Z Flip5', harga: 12555000, gambar: 'https://cworld.id/wp-content/uploads/2023/07/samsung_galaxy_z_flip5_5g_mint_1_1.jpg'},
+  
+  // --- IPHONE (8 Item) ---
+  { nama: 'iPhone 17 Pro Max', harga: 29999999, gambar: 'https://www.mobilephonesdirect.co.uk/files/images/handsets/apple/01_iphone17-pro-max_cosmic-orange_pm.png'},
+  { nama: 'iPhone 16 Pro Max', harga: 24550000, gambar: 'https://ibox.co.id/_next/image?url=https%3A%2F%2Fcdnpro.eraspace.com%2Fmedia%2Fcatalog%2Fproduct%2Fi%2Fp%2Fiphone_16_pro_max_desert_titanium_01_3.jpg&w=3840&q=45'},
+  { nama: 'iPhone 15 Pro Max', harga: 18999000, gambar: 'https://static.retailworldvn.com/Products/Images/12220/318072/smartphone-iphone-15-pro-max-8gb-512gb-white-titanium-black-1.jpg'},
+  { nama: 'iPhone 14 Pro Max', harga: 13999000, gambar: 'https://indodana-web.imgix.net/assets/iphone-14-pro-deep-purple-thumbnail.png?auto=compress'},
+  { nama: 'iPhone 13 Pro Max', harga: 12999000, gambar: 'https://completeselular.co.id/wp-content/uploads/2022/04/ip-13-pro-blue-600x600.jpg'},
+  { nama: 'iPhone 12 Pro Max', harga: 10999000, gambar: 'https://indodana-web.imgix.net/assets/iphone-12-pro-max-pacific-blue-thumbnail.png?auto=compress'},
+  { nama: 'Iphone 11 Pro max', harga: 8999999, gambar: 'https://carisinyal.com/wp-content/uploads/2022/01/iPhone-11-Pro-Max_.webp'},
+  { nama: 'iPhone XR', harga: 7555999, gambar: 'https://images.tokopedia.net/img/cache/700/OJWluG/2022/12/16/ee44ec70-c458-4b95-b6cf-610dfb23e335.jpg?ect=4g'},
+  
+  // --- OPPO (6 Item) ---
+  { nama: 'Oppo Find N3 Fold', harga: 29599000, gambar: 'https://cdnpro.eraspace.com/media/catalog/product/o/p/oppo_find_n3_fold_black_1.jpg'},
+  { nama: 'Oppo Find 5', harga: 27500000, gambar: 'https://media.dinomarket.com/docs/imgTD/2025-05/DM_F136393CC927B85DB4AEDDD170DB63DA_210525110544_ll.jpg'},
+  { nama: 'Oppo Find 8X Pro 5G', harga: 20599000, gambar: 'https://cdnpro.eraspace.com/media/catalog/product/o/p/oppo_find_x8_pro_space_black_01_1.jpg'},
+  { nama: 'Oppo Find N3 Flip', harga: 12599000, gambar: 'https://m.media-amazon.com/images/I/41mwwj9GOoL.jpg'},
+  { nama: 'Oppo Reno 14 Pro', harga: 10999000, gambar: 'https://image.oppo.com/content/dam/oppo/common/mkt/v2-2/reno14-series/navigation/reno14/440-440-white-v1.png.thumb.webp'},
+  { nama: 'Oppo Reno 12 Pro', harga: 8599000, gambar: 'https://down-id.img.susercontent.com/file/id-11134207-7r98z-lxm3j9cy2a3164'},
+
+  // --- REALME (6 Item) ---
+  { nama: 'realme GT 7', harga: 9550000, gambar: 'https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/d2cfa9641b33410888e1ceff0c935d8d~tplv-aphluv4xwc-resize-webp:800:800.webp?dr=15584&t=555f072d&ps=933b5bde&shp=6ce186a1&shcp=e1be8f53&idc=my&from=1826719393'},
+  { nama: 'realme 15 Pro 5G', harga: 7999000, gambar: 'https://carisinyal.com/wp-content/uploads/2025/07/a1d8c27a-7a57-4786-8428-7466a67e9114_.webp'},
+  { nama: 'realme 15P', harga: 5799000, gambar: 'https://plazait.co.id/uploads/products/gallery/realme-15t-5g-8128gb-8256gb-garansi-resmi-1761287214-100.webp'},
+  { nama: 'realme 14 5G', harga: 4599000, gambar: 'https://cdnpro.eraspace.com/media/catalog/product/r/e/realme_14_5g_mecha_silver_01.jpg'},
+  { nama: 'realme 10', harga: 3199999, gambar: 'https://sc04.alicdn.com/kf/H21a1a8c5e70f44d1b1d079c02c3a3e36N.jpg'},
+  { nama: 'realme C75', harga: 8550000, gambar: 'https://static.retailworldvn.com/Products/Images/12220/333491/realme_c75_gold_1_1.jpg'},
+  
+  // --- POCO (6 Item) ---
+  { nama: 'Poco F7 Ultra', harga: 8599000, gambar: 'https://carisinyal.com/wp-content/uploads/2025/03/POCO-F7-ULtra_.webp'},
+  { nama: 'Poco F6 Pro 5G', harga: 7599000, gambar: 'https://carisinyal.com/wp-content/uploads/2024/05/POCO-F6_-1.webp'},
+  { nama: 'Poco X6 Pro 5G', harga: 6999000, gambar: 'https://down-id.img.susercontent.com/file/id-11134207-7r98p-lywxci4f5gq086'},
+  { nama: 'Poco F5 Pro 5G', harga: 5999999, gambar: 'https://carisinyal.com/wp-content/uploads/2023/05/POCO-F5-biru_.webp'},
+  { nama: 'Poco F4 GT', harga: 8000000, gambar: 'https://phonesstorekenya.com/wp-content/uploads/2022/05/Poco-F4-GT-a.jpg.webp'},
+  { nama: 'Poco X5 Pro 5G', harga: 3599000, gambar: 'https://http2.mlstatic.com/D_NQ_NP_731864-MCO54983223076_042023-O.webp'},
+
+  // --- XIAOMI (6 Item) ---
+  { nama: 'Xiaomi 15 Ultra', harga: 20599000, gambar: 'https://carisinyal.com/wp-content/uploads/2024/10/Xiaomi-15-ok_.webp'},
+  { nama: 'Xiaomi 14', harga: 11599000 , gambar: 'https://cworld.id/wp-content/uploads/2024/10/xiaomi_14t_gray_1.jpg'},
+  { nama: 'Xiaomi 13T', harga: 7599000 , gambar: 'https://smartkoshk.com/cdn/shop/files/green.png?v=1710771579'},
+  { nama: 'Redmi Note 14 Pro 5G', harga: 4599000, gambar: 'https://cworld.id/wp-content/uploads/2025/01/xiaomi_redmi_note_14_pro_5g_prpl_1_1.jpg'},
+  { nama: 'Xiaomi Redmi 14C', harga: 1599000, gambar: 'https://sentraponsel.com/pic_product/17012025144920xiaomi_redmi_14c_midnight_black_1_1.jpg'},
+  { nama: 'Xiaomi Redmi A5', harga: 1399000, gambar: 'https://mfono.com/wp-content/uploads/2025/04/552691-01.webp'},
+
+  // --- VIVO (6 Item) ---
+  { nama: 'Vivo X200 Ultra 5G', harga: 23599999, gambar: 'https://down-id.img.susercontent.com/file/id-11134207-7rbkb-m94a89swy8pe56'},
+  { nama: 'Vivo X100 Ultra 5G', harga: 19599000, gambar: 'https://carisinyal.com/wp-content/uploads/2024/05/vivo-X100-Ultra_.webp'},
+  { nama: 'Vivo X200 Pro 5G', harga: 14999000, gambar: 'https://cdnpro.eraspace.com/media/catalog/product/v/i/vivo_x200_pro_silver_1_1.jpg'},
+  { nama: 'Vivo X100 5G', harga: 12599000, gambar: 'https://asia-exstatic-vivofs.vivo.com/PSee2l50xoirPK7y/1703155786129/235fc4fbe0277e6fc5f25fc84fabdd7f.png'},
+  { nama: 'Vivo V60', harga: 8599000, gambar: 'https://cdnpro.eraspace.com/media/catalog/product/v/i/vivo_v60_5g_purple_1.jpg'},
+  { nama: 'Vivo V50', harga: 5550000, gambar: 'https://cdnpro.eraspace.com/media/catalog/product/v/i/vivo_v50_black_1.jpg'},
+  
+  // --- ROG (4 Item, perlu ditambah 2 lagi jika ingin minimal 6) ---
+  { nama: 'Asus ROG Phone 9 Pro Ultimate', harga: 24999000, gambar: 'https://dlcdnwebimgs.asus.com/gain/351D03FD-B09A-4877-BED5-A0C877023469/w260/fwebp'},
+  { nama: 'Asus ROG Phone 8 Pro', harga: 20599000, gambar: 'https://cworld.id/wp-content/uploads/2024/03/asus_rog_phone_8_phantom_black_1.jpg'},
+  { nama: 'Asus ROG Phone 7 Pro', harga: 19999000, gambar: 'https://sc04.alicdn.com/kf/Aa35798b56a4a48f589895cbaaf2928695.jpg'},
+  { nama: 'Asus ROG Phone 9FE', harga: 12599000, gambar: 'https://dlcdnwebimgs.asus.com/gain/973395F8-FFF9-4F1D-BF8F-1BBADD4CF04D'},
+];
+    // ===================================================================
+
+    // Ambil data keranjang dari localStorage
+    let keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
+
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    // Fungsi untuk mendapatkan detail gambar dari nama produk
+    function getProdukDetail(namaProduk) {
+        return produkLengkap.find(p => p.nama === namaProduk) || {};
+    }
+
+    function renderKeranjang() {
+      const list = document.getElementById('listKeranjang');
+      const total = document.getElementById('totalHarga');
+      list.innerHTML = '';
+      let totalHarga = 0;
+
+      if (keranjang.length === 0) {
+        list.innerHTML = `
+            <li class="list-group-item text-center py-5">
+                <p>Wah, keranjang belanjamu kosong!</p>
+                <a href="index.html" class="btn btn-success btn-sm">Mulai Belanja</a>
+            </li>`;
+        total.textContent = formatRupiah(0);
+        return;
+      }
+      
+      keranjang.forEach((p, index) => {
+        // Ambil detail produk (termasuk gambar)
+        const detail = getProdukDetail(p.nama);
+        const imageUrl = detail.gambar || 'https://via.placeholder.com/60?text=HP'; // Gambar default
+
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          <div class="d-flex align-items-center flex-grow-1">
+             <img src="${imageUrl}" class="cart-img" alt="${p.nama}">
+             <div class="me-auto">
+                <h6 class="my-0">${p.nama}</h6>
+                <small class="text-danger fw-bold">${formatRupiah(p.harga)}</small>
+             </div>
+          </div>
+          <button class="btn btn-sm btn-link text-danger text-decoration-none" onclick="hapusDariKeranjang(${index})">Hapus</button>
+        `;
+        list.appendChild(li);
+        totalHarga += p.harga;
+      });
+      total.textContent = formatRupiah(totalHarga);
+    }
+
+    function hapusDariKeranjang(index) {
+        keranjang.splice(index, 1);
+        localStorage.setItem('keranjang', JSON.stringify(keranjang));
+        renderKeranjang();
+    }
+
+  // ... (fungsi-fungsi lain tetap di sini)
+
+    function kosongkanKeranjang() {
+        if (keranjang.length === 0) {
+            alert("Keranjang sudah kosong.");
+            return;
+        }
+
+        // Tampilkan Modal Konfirmasi
+        const modalEl = document.getElementById('kosongkanModal');
+        const hapusSemuaBtn = document.getElementById('btnHapusSemuaAksi');
+        
+        // Buat instance modal baru atau ambil yang sudah ada
+        const myModal = new bootstrap.Modal(modalEl);
+
+        // Atur event listener untuk tombol aksi di dalam modal
+        hapusSemuaBtn.onclick = function() {
+            // Lakukan aksi penghapusan
+            keranjang = [];
+            localStorage.removeItem('keranjang');
+            renderKeranjang();
+            // Sembunyikan modal setelah aksi selesai
+            myModal.hide();
+        };
+
+        myModal.show();
+    }
+    
+    // ... (sisa skrip)
+
+    function lanjutKeCheckout() {
+        if (keranjang.length === 0) {
+            alert("Keranjang masih kosong, yuk belanja dulu!");
+        } else {
+            // Ini akan mengarahkan ke halaman checkout, diasumsikan file checkout.html sudah ada
+            window.location.href = 'checkout.html';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderKeranjang);
+  </script>
+</body>
+</html>
